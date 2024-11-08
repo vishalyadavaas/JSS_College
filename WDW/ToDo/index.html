@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>ToDo List</title>
+  <style>
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <div class="flex justify-center items-center h-screen">
+    <div class="w-[600px] border bg-gray-50 p-8 rounded-lg">
+      <h1 class="text-3xl font-bold text-center">ToDo List</h1>
+
+      <div class="mt-8 flex items-center space-x-4">
+        <input type="text" id="taskInput" placeholder="Enter your task"
+          class="border focus:outline-gray-300 py-3 rounded-lg pl-4 text-lg flex-1" />
+        <button id="addTaskButton" class="py-3 px-8 text-lg rounded-lg bg-[#21D300] font-bold text-white">
+          Add
+        </button>
+      </div>
+
+      <ul id="taskList" class="mt-6 space-y-4">
+        <!-- List items will go here -->
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const addTaskButton = document.getElementById("addTaskButton");
+    const taskList = document.getElementById("taskList");
+
+    // Load tasks from localStorage when the page loads
+    window.onload = () => {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.forEach(task => {
+        createTaskElement(task);
+      });
+    };
+
+    // Save tasks to localStorage
+    function saveTasks() {
+      const tasks = [];
+      const taskElements = taskList.querySelectorAll('li');
+      taskElements.forEach(taskElement => {
+        const taskContent = taskElement.querySelector('span').textContent;
+        tasks.push(taskContent);
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Create and add a task element
+    function createTaskElement(taskText) {
+      const li = document.createElement("li");
+      li.classList.add("task", "bg-white", "p-3", "rounded-lg", "border", "border-gray-200", "text-wrap");
+
+      const taskContent = document.createElement("span");
+      taskContent.classList.add("text-lg", "text-wrap");
+      taskContent.textContent = taskText;
+
+      const deleteButton = document.createElement("button");
+      deleteButton.classList.add("text-red-500", "font-bold", "text-xl");
+      deleteButton.textContent = "Delete";
+
+      li.appendChild(taskContent);
+      li.appendChild(deleteButton);
+
+      taskList.appendChild(li);
+
+      deleteButton.addEventListener("click", () => {
+        li.remove();
+        saveTasks(); // Update localStorage after delete
+      });
+
+      saveTasks(); // Save to localStorage whenever a task is added
+    }
+
+    // Add new task
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        createTaskElement(taskText);
+        taskInput.value = "";
+      }
+    }
+
+    // Event listeners
+    addTaskButton.addEventListener("click", addTask);
+    taskInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    });
+  </script>
+</body>
+
+</html>

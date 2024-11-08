@@ -17,13 +17,28 @@
         .department-list li {
             margin: 10px 0;
         }
+
         .department-list a {
             text-decoration: none;
-            color: #007bff;
+            color: #007bff; /* Default color for unvisited links */
             transition: color 0.2s;
         }
+
+        .department-list a:link {
+            color: #007bff; /* Unvisited links */
+        }
+
+        .department-list a:visited {
+            color: green; /* Visited links */
+        }
+
         .department-list a:hover {
-            color: #0056b3;
+            color: red; /* Hovered links */
+            text-decoration: underline;
+        }
+
+        .department-list a:active,.department-list a:focus {
+            color: black; /* Active links */
         }
     </style>
 </head>
@@ -35,7 +50,6 @@
             <li><a href="ece_cat.html" target="right_frame">ECE</a></li>
             <li><a href="eee_cat.html" target="right_frame">EEE</a></li>
             <li><a href="civil_cat.html" target="right_frame">CIVIL</a></li>
-            <!-- Add more department links here -->
         </ul>
     </div>
     
